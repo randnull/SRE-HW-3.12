@@ -19,7 +19,13 @@ RUN echo "host replication replicator 0.0.0.0/0 trust" >> /usr/local/share/postg
 | 563 | 16395    | replicator | walreceiver      | 172.18.0.3  |                 | 51522       | 2025-03-22 15:01:20.680994+00 |              | streaming | 0/53DD50A0 | 0/53DD50A0 | 0/53DD50A0 | 0/53DD50A0 | 00:00:00.0013  | 00:00:00.00235 | 00:00:00.00282  | 0             | async      | 2025-03-22 15:03:53.53187+00  |
 | 562 | 16395    | replicator | walreceiver      | 172.18.0.4  |                 | 49700       | 2025-03-22 15:01:20.606135+00 |              | streaming | 0/53DD50A0 | 0/53DD50A0 | 0/53DD50A0 | 0/53DD50A0 | 00:00:00.001239 | 00:00:00.00226 | 00:00:00.002733 | 0             | async      | 2025-03-22 15:03:53.531785+00 |
 
+Как видно, задержек составляет 2-3 милисекунды.
 
+Второй способ починить - вернуть аутентификацию (md5), и передать пароль вручную 
+
+Например передадим пароль через docker env:
+ENV PGPASSWORD=replicator_password
+либо использовать ~/.pgpass, как советует дока (https://postgrespro.ru/docs/postgresql/9.6/libpq-envars)
 
 # Поиск ошибок
 
@@ -46,3 +52,4 @@ COPY postgresql.conf /usr/local/share/postgresql/postgresql.conf.sample
 
 Не очень понятна, так как вызывает ошибку при запуске, из-за отсуствия метода аутентификации и диапозона ip.
 
+Также заменим wal_keep_segments на wal_keep_size = 512MB
